@@ -11,25 +11,66 @@ mars are not in line with the original meaning
 of English words (such as 'WHERE').<br>
 SDL's syntax is C-like and Python-like. For 
 example: 
+## SDL syntax
+
+### write
+Store a value, with an optional TTL.
 ```sdl
-write if (receiver == 514 && msg == '7891') then value = 'Not Found' ttl = 300ms
+write key = 'value'
+write key = 'value' ttl = 300ms
+write if (key2 == 'x') then key = 'value' ttl = 5s
 ```
 
-## What's MySDL
-This database is **My** SDL so I can use it 
-for something , I'll use it to cache IPC message<br>
-You can use it by [SDLSH](https://github.com/Saladin5101/sdlsh.git) or use [libsdl](https://github.com/Saladin5101/libsdl) library via C.<br>
+### read
+Fetch a value by key, or scan all keys.
+```sdl
+read key
+read *
+```
 
-### How to Use It In a Server
-You can `make install` this SDL database into your computer.<br>
-Of course, this database is very small, because it is using for my
-IPC cache. <br>
+### erase
+Delete a key.
+```sdl
+erase key
+```
 
-### Contribute
-#### Report Bug
-You can open a issue in issues, but please tell me what happend.<br>
-#### Upload Patch
-I love mailing list, but this is my toll, so you can use PR to upload
-your patch.<br>
-### License
-We Licensed on GPLv2 or later.
+### flush
+Drop every entry in the database.
+```sdl
+flush
+```
+
+### TTL units
+`300ms` · `5s` · `1m`
+
+## Build & Install
+
+```sh
+make
+sudo make install   # installs to /usr/local/bin/mysdl
+```
+
+## Usage
+
+Pass an SDL statement as a single argument:
+```sh
+mysdl "write cache/514:7891 = 'Not Found' ttl = 300ms"
+mysdl "read cache/514:7891"
+mysdl "erase cache/514:7891"
+mysdl "read *"
+mysdl "flush"
+```
+
+Or use the interactive shell [SDLSH](https://github.com/Saladin5101/sdlsh.git),
+or embed via [libsdl](https://github.com/Saladin5101/libsdl).
+
+## Contribute
+
+**Report a bug** — open an issue and describe what happened.
+
+**Send a patch** — open a PR. I love Mailing list but this is my play project , so 
+I think you can use Pull Request to contribute your code.
+
+## License
+
+GPL-2.0-or-later
